@@ -36,5 +36,9 @@ pipeline {
       juxtapose event: 'failure'
       sh 'figlet "FAILURE"'
     }
+    always {
+      // Fix file ownership
+      sh 'docker run --rm -v $(pwd):/app -w /app $DOCKER_NODE chown -R $(id -u):$(id -g) *'
+    }
   }
 }
