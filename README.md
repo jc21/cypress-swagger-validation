@@ -22,8 +22,6 @@ yarn add @jc21/cypress-swagger-validation
 
 Then in your cypress Plugins file:
 ```javascript
-const SwaggerValidation = require('@jc21/cypress-swagger-validation').Client;
-
 module.exports = (on, config) => {
     // ...
     on('task', require('@jc21/cypress-swagger-validation')(config));
