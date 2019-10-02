@@ -1,4 +1,4 @@
-import SwaggerValidation from './index';
+import {SwaggerValidation} from './index';
 
 test('test JSON swagger doc', async () => {
     const sv = SwaggerValidation({
