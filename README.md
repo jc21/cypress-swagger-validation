@@ -25,10 +25,10 @@ Then in your cypress Plugins file:
 const SwaggerValidation = require('@jc21/cypress-swagger-validation').Client;
 
 module.exports = (on, config) => {
-	// ...
-	on('task', require('@jc21/cypress-swagger-validation')(config));
-	// ...
-	return config;
+    // ...
+    on('task', require('@jc21/cypress-swagger-validation')(config));
+    // ...
+    return config;
 };
 ```
 
@@ -37,19 +37,19 @@ module.exports = (on, config) => {
 
 ```javascript
 describe('Basic API checks', () => {
-	it('Should return a valid health payload', function () {
-		cy.request('/healthz').then($response => {
-			// Check the swagger schema:
-			cy.task('validateSwaggerSchema', {
-				file:           './testing/swagger.json',  // optional, see below
-				endpoint:       '/healthz',
-				method:         'get',
-				statusCode:     200,
-				responseSchema: $response.body,
-				verbose:        true,                      // optional, default: false
-			}).should('equal', null);
-		});
-	});
+    it('Should return a valid health payload', function () {
+        cy.request('/healthz').then($response => {
+            // Check the swagger schema:
+            cy.task('validateSwaggerSchema', {
+                file:           './testing/swagger.json',  // optional, see below
+                endpoint:       '/healthz',
+                method:         'get',
+                statusCode:     200,
+                responseSchema: $response.body,
+                verbose:        true,                      // optional, default: false
+            }).should('equal', null);
+        });
+    });
 });
 ```
 
