@@ -2,7 +2,7 @@ import * as Parser from 'json-schema-ref-parser';
 import * as JsonPath from 'jsonpath';
 import * as Models from './models';
 
-export function SwaggerValidation(config: object) {
+export default function SwaggerValidation(config: object) {
     let swaggerSchema: any;
 
     const getSwaggerSchema = async (configuration: Models.IConfig, file: string | null): Promise<string | null> => {
