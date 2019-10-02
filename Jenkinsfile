@@ -8,8 +8,16 @@ pipeline {
     stage('Build') {
       steps {
         ansiColor('xterm') {
-          sh 'docker run --rm -v $(pwd):/app -w /app $DOCKER_NODE npm --registry=https://registry.npmjs.org install'
-          sh 'docker run --rm -v $(pwd):/app -w /app $DOCKER_NODE npm run-script build'
+          sh 'docker run --rm -v $(pwd):/app -w /app $DOCKER_NODE yarn --registry=https://registry.npmjs.org install'
+          sh 'docker run --rm -v $(pwd):/app -w /app $DOCKER_NODE yarn build'
+        }
+      }
+    }
+    stage('Test') {
+      steps {
+        ansiColor('xterm') {
+          sh 'docker run --rm -v $(pwd):/app -w /app $DOCKER_NODE yarn --registry=https://registry.npmjs.org install'
+          sh 'docker run --rm -v $(pwd):/app -w /app $DOCKER_NODE yarn test'
         }
       }
     }
