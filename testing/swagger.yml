@@ -1,0 +1,114 @@
+openapi: 3.0.0
+info:
+  title: Example API
+  version: '1.0'
+paths:
+  /healthz:
+    get:
+      operationId: healthz
+      summary: Returns the health statuz
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  result:
+                    type: object
+                    additionalProperties: false
+                    required:
+                      - commit
+                      - healthy
+                      - checks
+                    properties:
+                      commit:
+                        type: string
+                        description: Commit hash
+                        example: 88cb49b8f8d4d9ce7c4825aa13410b849bf99878
+                        minLength: 8
+                      healthy:
+                        type: boolean
+                        description: Healthy?
+                        example: true
+                      checks:
+                        type: object
+                        description: Checks to determine health
+                        additionalProperties: false
+                        required:
+                          - databases
+                        properties:
+                          databases:
+                            type: object
+                            description: Databases are reachable
+                  error:
+                    $ref: '#/components/schemas/Error'
+              examples:
+                default:
+                  value:
+                    result:
+                      commit: 88cb49b8f8d4d9ce7c4825aa13410b849bf99878
+                      healthy: true
+                      checks:
+                        databases:
+                          healthy: true
+                unhealthy:
+                  value:
+                    result:
+                      commit: 88cb49b8f8d4d9ce7c4825aa13410b849bf99878
+                      healthy: false
+                      checks:
+                        databases:
+                          healthy: false
+components:
+  schemas:
+    ExtendedError:
+      type: object
+      required:
+        - error_lines
+        - error_fields
+        - additional_errors
+        - errors
+      properties:
+        error_lines:
+          type: number
+        error_fields:
+          type: number
+        additional_errors:
+          type: number
+        errors:
+          type: array
+          nullable: true
+          items:
+            type: object
+            required:
+              - line
+              - messages
+            additionalProperties: false
+            properties:
+              line:
+                type: number
+                minimum: 1
+              messages:
+                type: array
+                items:
+                  type: string
+    Error:
+      type: object
+      description: Error object
+      additionalProperties: false
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          description: Error code
+          minimum: 0
+        message:
+          type: string
+          description: Error message
+        extended:
+          $ref: '#/components/schemas/ExtendedError'

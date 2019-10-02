@@ -1,0 +1,39 @@
+{
+  "name": "@jc21/cypress-swagger-validation",
+  "version": "0.0.1",
+  "description": "Validate your request responses against Swagger Endpoints",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "author": "Jamie Curnow <jc@jc21.com>",
+  "license": "MIT",
+  "keywords": [
+    "cypress",
+    "swagger",
+    "api"
+  ],
+  "scripts": {
+    "build": "rm -rf lib && tsc --project tsconfig.build.json",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jc21/cypress-swagger-validation"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "@types/json-schema": "^7.0.3",
+    "@types/jsonpath": "^0.2.0",
+    "@types/node": "^12.7.9",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.1.0",
+    "ts-node": "^8.4.1",
+    "tslint": "^5.20.0",
+    "typescript": "^3.6.3"
+  },
+  "dependencies": {
+    "ajv": "^6.10.2",
+    "json-schema": "^0.2.5",
+    "json-schema-ref-parser": "^7.1.1",
+    "jsonpath": "^1.0.2"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "extends": [
+    "tslint:recommended"
+  ],
+  "rules": {
+    "no-console": false,
+    "await-promise": true,
+    "no-floating-promises": true,
+    "no-unnecessary-qualifier": true,
+    "no-unused-variable": true,
+    "no-use-before-declare": true,
+    "return-undefined": false,
+    "strict-type-predicates": true,
+    "space-before-function-paren": false,
+    "trailing-comma": true,
+    "max-line-length": false,
+    "quotemark": {
+      "options": [
+        "single"
+      ]
+    }
+  }
+}
