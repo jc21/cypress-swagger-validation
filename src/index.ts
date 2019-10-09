@@ -44,9 +44,9 @@ export function SwaggerValidation(config: object) {
             }
 
             const verbose = options.verbose || false;
-            const schema = await getSwaggerSchema(config, options.file || null);
-            const ref = '$.paths[\'' + options.endpoint + '\'].' + options.method + '.responses.' + options.statusCode + '.content[\'application/json\'].schema';
-            let endpoint = JsonPath.query(schema, ref);
+            const schema  = await getSwaggerSchema(config, options.file || null);
+            const ref     = '$.paths[\'' + options.endpoint + '\'].' + options.method + '.responses.' + options.statusCode + '.content[\'application/json\'].schema';
+            let endpoint  = JsonPath.query(schema, ref);
 
             if (!endpoint || !endpoint.length) {
                 return new Error('Could not find Swagger Schema with: ' + ref);
@@ -60,6 +60,7 @@ export function SwaggerValidation(config: object) {
                 const Ajv = require('ajv')({
                     allErrors: true,
                     format: 'full',
+                    nullable: true,
                     verbose: true,
                 });
 

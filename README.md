@@ -56,7 +56,7 @@ describe('Basic API checks', () => {
 ### The swagger file
 
 Due to the fact that this plugin runs on the Cypress Backend, the location of the file must be defined as either
-the full path on disk or relative path to the running of the cypress command. You can defined the swagger file location
+the full path on disk or relative path to the running of the cypress command. You can define the swagger file location
 either with an environment variable which can apply to all tests:
 
 `config.env.swaggerFile`
