@@ -1,9 +1,13 @@
 import * as Parser from 'json-schema-ref-parser';
 import * as JsonPath from 'jsonpath';
+import Logger from './logger';
 import * as Models from './models';
+
+const defaultLog = new Logger('cypress-swagger-validation');
 
 export function SwaggerValidation(config: object) {
     let swaggerSchema: any;
+    defaultLog.success('Plugin Loaded');
 
     const getSwaggerSchema = async (configuration: Models.IConfig, file: string | null): Promise<string | null> => {
         if (!swaggerSchema) {
@@ -30,6 +34,7 @@ export function SwaggerValidation(config: object) {
          * @returns {string|null}   Errors or null if OK
          */
         validateSwaggerSchema: async (options: Models.IOptions): Promise<Error | null> => {
+            const log = new Logger('validateSwaggerSchema');
             if (!options.endpoint) {
                 return new Error('Endpoint was not specified (endpoint)');
             }
@@ -56,30 +61,27 @@ export function SwaggerValidation(config: object) {
             endpoint = endpoint.shift();
 
             // Now validate the endpoint schema against the response
-            try {
-                const Ajv = require('ajv')({
-                    allErrors: true,
-                    format: 'full',
-                    nullable: true,
-                    verbose: true,
-                });
+            const Ajv = require('ajv')({
+                allErrors: true,
+                format: 'full',
+                nullable: true,
+                verbose: true,
+            });
 
-                const valid = Ajv.validate(endpoint, options.responseSchema);
-                if (valid && !Ajv.errors) {
-                    return null;
-                } else {
-                    if (verbose) {
-                        console.log('validateSwaggerSchema:', Ajv.errors);
-                        console.log('validateSwaggerSchema responseSchema:', options.responseSchema);
-                        console.log('validateSwaggerSchema endpoint:', options.endpoint);
-                    }
-                    return new Error(Ajv.errorsText());
-                }
-            } catch (e) {
+            if (verbose) {
+                log.debug('Endpoint:', options.endpoint);
+                log.debug('Response Schema:', options.responseSchema);
+            }
+
+            const valid = Ajv.validate(endpoint, options.responseSchema);
+            if (valid && !Ajv.errors) {
                 if (verbose) {
-                    console.error('validateSwaggerSchema Error: ', e);
+                    log.success('Validation Success');
                 }
-                return e;
+                return null;
+            } else {
+                log.error(Ajv.errorsText());
+                return Ajv.errorsText();
             }
         }
     };

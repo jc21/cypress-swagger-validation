@@ -22,6 +22,7 @@ test('test JSON swagger doc', async () => {
             }
         },
         statusCode: 200,
+        verbose: true,
     });
 
     expect(result).toBe(null);
@@ -49,6 +50,7 @@ test('test YML swagger doc', async () => {
             }
         },
         statusCode: 200,
+        verbose: true,
     });
 
     expect(result).toBeNull();
@@ -75,10 +77,11 @@ test('test JSON swagger doc Invalid', async () => {
             }
         },
         statusCode: 200,
+        verbose: true,
     });
 
-    expect(typeof result).toBe('object');
-    expect(result ? result.message : null).toBe('data.result should have required property \'commit\'');
+    expect(typeof result).toBe('string');
+    expect(result).toBe('data.result should have required property \'commit\'');
 });
 
 test('test YML swagger doc Invalid', async () => {
@@ -104,8 +107,9 @@ test('test YML swagger doc Invalid', async () => {
             }
         },
         statusCode: 200,
+        verbose: true,
     });
 
-    expect(typeof result).toBe('object');
-    expect(result ? result.message : null).toBe('data.result should NOT have additional properties');
+    expect(typeof result).toBe('string');
+    expect(result).toBe('data.result should NOT have additional properties');
 });
