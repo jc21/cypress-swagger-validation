@@ -6,21 +6,20 @@ import * as Models from './models';
 const defaultLog = new Logger('cypress-swagger-validation');
 
 export function SwaggerValidation(config: object) {
-    let swaggerSchema: any;
+    const swaggerSchema: any = [];
     defaultLog.success('Plugin Loaded');
 
     const getSwaggerSchema = async (configuration: Models.IConfig, file: string | null): Promise<string | null> => {
-        if (!swaggerSchema) {
-            if (typeof configuration.env !== 'undefined' && typeof configuration.env.swaggerFile !== 'undefined') {
-                file = configuration.env.swaggerFile;
-            }
-            if (!file) {
-                throw new Error('Swagger file was not specified (swaggerFile)');
-            } else {
-                swaggerSchema = await Parser.dereference(file);
-            }
+        if (!file && typeof configuration.env !== 'undefined' && typeof configuration.env.swaggerFile !== 'undefined') {
+            file = configuration.env.swaggerFile;
+        } else if (!file) {
+            throw new Error('Swagger file was not specified (swaggerFile)');
         }
-        return swaggerSchema;
+
+        if (file && typeof swaggerSchema[file] === 'undefined' || !swaggerSchema[file]) {
+            swaggerSchema[file] = await Parser.dereference(file);
+        }
+        return swaggerSchema[file];
     };
 
     return {
