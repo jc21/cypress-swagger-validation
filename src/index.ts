@@ -69,7 +69,7 @@ export function SwaggerValidation(config: object) {
 
             if (verbose) {
                 log.debug('Endpoint:', options.endpoint);
-                log.debug('Response Schema:', options.responseSchema);
+                log.debug('Response Schema:', JSON.stringify(options.responseSchema, null, 2));
             }
 
             const valid = Ajv.validate(endpoint, options.responseSchema);
