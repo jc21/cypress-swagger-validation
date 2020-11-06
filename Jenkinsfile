@@ -28,6 +28,9 @@ pipeline {
         withNPM(npmrcConfig: 'npm-jc21') {
           sh 'docker run --rm -v $(pwd):/app -w /app $DOCKER_NODE npm --registry=https://registry.npmjs.org publish --access public || echo "Skipping publish"'
         }
+        withNPM(npmrcConfig: 'npm-github-jc21') {
+          sh 'docker run --rm -v $(pwd):/app -w /app $DOCKER_NODE npm --registry=https://npm.pkg.github.com/ publish --access public || echo "Skipping publish"'
+        }
       }
       juxtapose event: 'success'
       sh 'figlet "SUCCESS"'
