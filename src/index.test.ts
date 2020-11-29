@@ -1,5 +1,28 @@
 import {SwaggerValidation} from './index';
 
+test('test valid JSON swagger file', async () => {
+    const sv = SwaggerValidation({
+        env: {
+            swaggerFile: './testing/swagger.json'
+        }
+    });
+
+    const result = await sv.validateSwaggerFile();
+    expect(result).toBe(null);
+});
+
+test('test invalid JSON swagger file', async () => {
+    const sv = SwaggerValidation({
+        env: {
+            swaggerFile: './testing/swagger-invalid.json'
+        }
+    });
+
+    const result = await sv.validateSwaggerFile();
+    const resultString = JSON.stringify(result, null, 2);
+    expect(resultString).toMatch(/JSON_OBJECT_VALIDATION_FAILED/i);
+});
+
 test('test JSON swagger doc', async () => {
     const sv = SwaggerValidation({
         env: {

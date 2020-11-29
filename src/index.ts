@@ -1,3 +1,4 @@
+import * as SwaggerParser from '@apidevtools/swagger-parser';
 import * as Parser from 'json-schema-ref-parser';
 import * as JsonPath from 'jsonpath';
 import Logger from './logger';
@@ -29,7 +30,8 @@ export function SwaggerValidation(config: object) {
          * @param   {string}        options.method
          * @param   {number}        options.statusCode
          * @param   {object}        options.responseSchema
-         * @param   {boolean}       options.verbose
+         * @param   {boolean}       [options.verbose]
+         * @param   {string}        [options.file]
          * @returns {string|null}   Errors or null if OK
          */
         validateSwaggerSchema: async (options: Models.IOptions): Promise<Error | null> => {
@@ -81,6 +83,24 @@ export function SwaggerValidation(config: object) {
             } else {
                 log.error(Ajv.errorsText());
                 return Ajv.errorsText();
+            }
+        },
+
+        /**
+         * @param   {object}        options
+         * @param   {string}        [options.file]
+         * @returns {string|null}   Errors or null if OK
+         */
+        validateSwaggerFile: async (options?: Models.IOptions): Promise<Error | null> => {
+            const log = new Logger('validateSwaggerFile');
+            const schema  = await getSwaggerSchema(config, options?.file || null);
+
+            try {
+                let api = await SwaggerParser.validate(schema || "");
+                log.info("API name: %s, Version: %s", api.info.title, api.info.version);
+                return null;
+            } catch(err) {
+                return err;
             }
         }
     };

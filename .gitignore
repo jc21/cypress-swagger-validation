@@ -2,3 +2,4 @@
 node_modules
 lib/*
 *.swp
+yarn-error.log

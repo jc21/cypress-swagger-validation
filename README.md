@@ -37,6 +37,12 @@ module.exports = (on, config) => {
 
 ```javascript
 describe('Basic API checks', () => {
+    it('Should be a valid swagger schema', function () {
+        cy.task('validateSwaggerFile', {
+            file: './testing/swagger.json',  // optional path or full URL, see below
+        }).should('equal', null);
+    });
+
     it('Should return a valid health payload', function () {
         cy.request('/healthz').then($response => {
             // Check the swagger schema:
@@ -68,6 +74,14 @@ or within each individial test using the options below.
 
 
 ### Options
+
+#### validateSwaggerFile
+
+| Option           | Description                                                   | Optional | Default                  |
+| ---------------- | ------------------------------------------------------------- | -------- | ------------------------ |
+| `file`           | The location of the swagger file to use for contract testing  | true     | `config.env.swaggerFile` |
+
+#### validateSwaggerSchema
 
 | Option           | Description                                                   | Optional | Default                  |
 | ---------------- | ------------------------------------------------------------- | -------- | ------------------------ |
