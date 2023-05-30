@@ -8,16 +8,16 @@ pipeline {
     stage('Build') {
       steps {
         ansiColor('xterm') {
-          sh 'docker run --rm -v $(pwd):/app -w /app $DOCKER_NODE yarn --registry=https://registry.npmjs.org install'
-          sh 'docker run --rm -v $(pwd):/app -w /app $DOCKER_NODE yarn build'
+          sh 'docker run --rm -v $(pwd):/app -w /app node:18 yarn --registry=https://registry.npmjs.org install'
+          sh 'docker run --rm -v $(pwd):/app -w /app node:18 yarn build'
         }
       }
     }
     stage('Test') {
       steps {
         ansiColor('xterm') {
-          sh 'docker run --rm -v $(pwd):/app -w /app $DOCKER_NODE yarn --registry=https://registry.npmjs.org install'
-          sh 'docker run --rm -v $(pwd):/app -w /app $DOCKER_NODE yarn test'
+          sh 'docker run --rm -v $(pwd):/app -w /app node:18 yarn --registry=https://registry.npmjs.org install'
+          sh 'docker run --rm -v $(pwd):/app -w /app node:18 yarn test'
         }
       }
     }
@@ -26,10 +26,10 @@ pipeline {
     success {
       ansiColor('xterm') {
         withNPM(npmrcConfig: 'npm-jc21') {
-          sh 'docker run --rm -v $(pwd):/app -w /app $DOCKER_NODE npm --registry=https://registry.npmjs.org publish --access public || echo "Skipping publish"'
+          sh 'docker run --rm -v $(pwd):/app -w /app node:18 npm --registry=https://registry.npmjs.org publish --access public || echo "Skipping publish"'
         }
         withNPM(npmrcConfig: 'npm-github-jc21') {
-          sh 'docker run --rm -v $(pwd):/app -w /app $DOCKER_NODE npm --registry=https://npm.pkg.github.com/ publish --access public || echo "Skipping publish"'
+          sh 'docker run --rm -v $(pwd):/app -w /app node:18 npm --registry=https://npm.pkg.github.com/ publish --access public || echo "Skipping publish"'
         }
       }
       juxtapose event: 'success'
@@ -41,7 +41,7 @@ pipeline {
     }
     always {
       // Fix file ownership
-      sh 'docker run --rm -v $(pwd):/app -w /app $DOCKER_NODE chown -R $(id -u):$(id -g) *'
+      sh 'docker run --rm -v $(pwd):/app -w /app node:18 chown -R $(id -u):$(id -g) *'
     }
   }
 }
