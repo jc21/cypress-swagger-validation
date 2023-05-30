@@ -3,6 +3,7 @@ import * as Parser from 'json-schema-ref-parser';
 import * as JsonPath from 'jsonpath';
 import Logger from './logger';
 import * as Models from './models';
+import Ajv, {ErrorObject} from "ajv"
 
 const defaultLog = new Logger('cypress-swagger-validation');
 
@@ -34,7 +35,7 @@ export function SwaggerValidation(config: object) {
 		 * @param   {string}        [options.file]
 		 * @returns {string|null}   Errors or null if OK
 		 */
-		validateSwaggerSchema: async (options: Models.IOptions): Promise<Error | null> => {
+		validateSwaggerSchema: async (options: Models.IOptions): Promise<ErrorObject<string, Record<string, any>, unknown>[] | null | Error | undefined> => {
 			const log = new Logger('validateSwaggerSchema');
 			if (!options.endpoint) {
 				return new Error('Endpoint was not specified (endpoint)');
@@ -62,27 +63,27 @@ export function SwaggerValidation(config: object) {
 			endpoint = endpoint.shift();
 
 			// Now validate the endpoint schema against the response
-			const Ajv = require('ajv')({
+			// See: https://ajv.js.org/options.html
+			const ajv = new Ajv({
 				allErrors: true,
-				format: 'full',
-				nullable: true,
 				verbose: true,
-			});
+				strictSchema: false,
+			})
 
 			if (verbose) {
 				log.debug('Endpoint:', options.endpoint);
 				log.debug('Response Schema:', JSON.stringify(options.responseSchema, null, 2));
 			}
 
-			const valid = Ajv.validate(endpoint, options.responseSchema);
-			if (valid && !Ajv.errors) {
+			const validate = ajv.compile(endpoint)
+			if (validate(options.responseSchema)) {
 				if (verbose) {
 					log.success('Validation Success');
 				}
 				return null;
 			} else {
-				log.error(Ajv.errorsText());
-				return Ajv.errorsText();
+				log.error(validate.errors);
+				return validate.errors;
 			}
 		},
 

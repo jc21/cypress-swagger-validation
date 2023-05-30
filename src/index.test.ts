@@ -20,7 +20,7 @@ test('test invalid JSON swagger file', async () => {
 
 	const result = await sv.validateSwaggerFile();
 	const resultString = JSON.stringify(result, null, 2);
-	expect(resultString).toMatch(/JSON_OBJECT_VALIDATION_FAILED/i);
+	expect(resultString).toMatch(/Swagger schema validation failed/i);
 });
 
 test('test JSON swagger doc', async () => {
@@ -40,6 +40,30 @@ test('test JSON swagger doc', async () => {
 						healthy: true
 					}
 				},
+				commit: '88cb49b8f8d4d9ce7c48',
+				healthy: true
+			}
+		},
+		statusCode: 200,
+		verbose: true,
+	});
+
+	expect(result).toBe(null);
+});
+
+test('test JSON swagger doc 2', async () => {
+	const sv = SwaggerValidation({
+		env: {
+			swaggerFile: './testing/swagger.json'
+		}
+	});
+
+	const result = await sv.validateSwaggerSchema({
+		endpoint: '/healthz',
+		method: 'get',
+		responseSchema: {
+			result: {
+				checks: null,
 				commit: '88cb49b8f8d4d9ce7c48',
 				healthy: true
 			}
@@ -101,10 +125,10 @@ test('test JSON swagger doc Invalid', async () => {
 		},
 		statusCode: 200,
 		verbose: true,
-	});
+	}) as any;
 
-	expect(typeof result).toBe('string');
-	expect(result).toBe('data.result should have required property \'commit\'');
+	expect(typeof result).toBe('object');
+	expect(result[0].message).toBe('must have required property \'commit\'');
 });
 
 test('test YML swagger doc Invalid', async () => {
@@ -131,8 +155,8 @@ test('test YML swagger doc Invalid', async () => {
 		},
 		statusCode: 200,
 		verbose: true,
-	});
+	}) as any;
 
-	expect(typeof result).toBe('string');
-	expect(result).toBe('data.result should NOT have additional properties');
+	expect(typeof result).toBe('object');
+	expect(result[0].message).toBe('must NOT have additional properties');
 });
