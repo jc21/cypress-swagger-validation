@@ -1,6 +1,6 @@
 {
   "name": "@jc21/cypress-swagger-validation",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Validate your Swagger file and request responses against Swagger Endpoints",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
