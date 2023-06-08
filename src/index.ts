@@ -82,7 +82,7 @@ export function SwaggerValidation(config: object) {
 				}
 				return null;
 			} else {
-				log.error(validate.errors);
+				log.error(JSON.stringify(validate.errors, null, 2));
 				return validate.errors;
 			}
 		},
