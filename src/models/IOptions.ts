@@ -3,6 +3,7 @@ export interface IOptions {
     endpoint: string;
     method: string;
     statusCode: number;
+    contentType: string;
     responseSchema: object;
     verbose?: boolean;
 }
