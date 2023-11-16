@@ -52,6 +52,7 @@ describe('Basic API checks', () => {
                 method:         'get',
                 statusCode:     200,
                 responseSchema: $response.body,
+                contentType:    "application/hal+json",
                 verbose:        true,                      // optional, default: false
             }).should('equal', null);
         });
@@ -89,7 +90,8 @@ or within each individial test using the options below.
 | `endpoint`       | The name of the swagger endpoint to check                     |          |                          |
 | `method`         | The request method of the endpoint                            |          |                          |
 | `statuscode`     | The http status code beneath the method                       |          |                          |
-| `responseSchema` | The payload of the API response to validate                   |          |                          |
+| `contentType`    | The http status code beneath the method                       |          |                          |
+| `responseSchema` | The payload of the API response to validate                   | true     | `application/json`       |
 | `verbose`        | Console.log more info when validation fails                   | true     | false                    |
 
 
