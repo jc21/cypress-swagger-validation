@@ -30,6 +30,7 @@ export function SwaggerValidation(config: object) {
 		 * @param   {string}        options.endpoint
 		 * @param   {string}        options.method
 		 * @param   {number}        options.statusCode
+		 * @param   {string}        options.contentType
 		 * @param   {object}        options.responseSchema
 		 * @param   {boolean}       [options.verbose]
 		 * @param   {string}        [options.file]
@@ -52,7 +53,8 @@ export function SwaggerValidation(config: object) {
 
 			const verbose = options.verbose || false;
 			const schema  = await getSwaggerSchema(config, options.file || null);
-			const ref     = '$.paths[\'' + options.endpoint + '\'].' + options.method + '.responses.' + options.statusCode + '.content[\'application/json\'].schema';
+			const contentType = options.contentType || "application/json";
+            const ref = '$.paths[\'' + options.endpoint + '\'].' + options.method + '.responses.' + options.statusCode + '.content[\''+contentType+'\'].schema';
 			let endpoint  = JsonPath.query(schema, ref);
 
 			if (!endpoint || !endpoint.length) {
