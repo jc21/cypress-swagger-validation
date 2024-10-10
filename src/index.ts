@@ -1,9 +1,9 @@
 import * as SwaggerParser from '@apidevtools/swagger-parser';
+import Ajv, { ErrorObject } from "ajv";
 import * as Parser from 'json-schema-ref-parser';
 import * as JsonPath from 'jsonpath';
 import Logger from './logger';
 import * as Models from './models';
-import Ajv, {ErrorObject} from "ajv"
 
 const defaultLog = new Logger('cypress-swagger-validation');
 
