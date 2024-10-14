@@ -71,8 +71,8 @@ export function SwaggerValidation(config: object) {
 			})
 
 			if (verbose) {
-				log.debug('Endpoint:', options.endpoint);
-				log.debug('Response Schema:', JSON.stringify(options.responseSchema, null, 2));
+				log.debug('Endpoint:', options.method.toUpperCase(), options.endpoint);
+				log.debug('Response Data:', JSON.stringify(options.responseSchema, null, 2));
 			}
 
 			const validate = ajv.compile(endpoint)
@@ -82,7 +82,10 @@ export function SwaggerValidation(config: object) {
 				}
 				return null;
 			} else {
-				log.error(JSON.stringify(validate.errors, null, 2));
+				log.error('Validation Errors:', JSON.stringify(validate.errors, null, 2));
+				if (verbose) {
+					log.debug('Validation Schema was:', JSON.stringify(endpoint, null, 2));
+				}
 				return validate.errors;
 			}
 		},
