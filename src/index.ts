@@ -49,26 +49,37 @@ export function SwaggerValidation(config: object) {
 		 */
 		validateSwaggerSchema: async (options: Models.IOptions): Promise<ErrorObject<string, Record<string, any>, unknown>[] | null | Error | undefined> => {
 			const log = new Logger('validateSwaggerSchema');
+			let err = '';
 			if (!options.endpoint) {
-				return new Error('Endpoint was not specified (endpoint)');
+				err = 'Endpoint was not specified (endpoint)';
+				log.error(err);
+				return new Error(err);
 			}
 			if (!options.method) {
-				return new Error('Method was not specified (method)');
+				err = 'Method was not specified (method)';
+				log.error(err);
+				return new Error(err);
 			}
 			if (!options.statusCode) {
-				return new Error('Status Code was not specified (statusCode)');
+				err = 'Status Code was not specified (statusCode)';
+				log.error(err);
+				return new Error(err);
 			}
 			if (!options.responseSchema) {
-				return new Error('Response Schema was not specified (responseSchema)');
+				err = 'Response Schema was not specified (responseSchema)';
+				log.error(err);
+				return new Error(err);
 			}
 
 			const verbose = options.verbose || false;
 			const schema  = await getSwaggerSchema(config, options.file || null);
-			const ref     = '$.paths[\'' + options.endpoint + '\'].' + options.method + '.responses.' + options.statusCode + '.content[\'application/json\'].schema';
+			const ref     = '$.paths[\'' + options.endpoint + '\'].' + options.method + '.responses[\'' + options.statusCode + '\'].content[\'application/json\'].schema';
 			let endpoint  = JsonPath.query(schema, ref);
 
 			if (!endpoint || !endpoint.length) {
-				return new Error('Could not find Swagger Schema with: ' + ref);
+				err = 'Could not find Swagger Schema with: ' + ref;
+				log.error(err);
+				return new Error(err);
 			}
 
 			// The endpoint var should be an array of found items with only 1 item ideally.
