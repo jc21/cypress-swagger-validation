@@ -1,6 +1,7 @@
+import $RefParser from "@apidevtools/json-schema-ref-parser";
 import * as SwaggerParser from '@apidevtools/swagger-parser';
 import Ajv, { ErrorObject } from "ajv";
-import * as Parser from 'json-schema-ref-parser';
+import axios from 'axios';
 import * as JsonPath from 'jsonpath';
 import Logger from './logger';
 import * as Models from './models';
@@ -21,7 +22,16 @@ export function SwaggerValidation(config: object) {
 		defaultLog.success('Using Swagger File:', file);
 
 		if (file && typeof swaggerSchema[file] === 'undefined' || !swaggerSchema[file]) {
-			swaggerSchema[file] = await Parser.dereference(file);
+			if (file.toLowerCase().startsWith('http')) {
+				// Fun fact: json-schema-ref-parser doesn't work with proxies, at least
+				// it's not documented as to how to make it work with proxies.
+				// So instead, we're going to fetch the file ourselves and dereference it
+				// afterwards.
+				const response = await axios.get(file);
+				swaggerSchema[file] = await $RefParser.dereference(response.data);
+			} else {
+				swaggerSchema[file] = await $RefParser.dereference(file);
+			}
 		}
 		return swaggerSchema[file];
 	};
