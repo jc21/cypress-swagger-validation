@@ -14,10 +14,11 @@ export function SwaggerValidation(config: object) {
 	const getSwaggerSchema = async (configuration: Models.IConfig, file: string | null): Promise<string | null> => {
 		if (!file && typeof configuration.env !== 'undefined' && typeof configuration.env.swaggerFile !== 'undefined') {
 			file = configuration.env.swaggerFile;
-			defaultLog.success('Using Swagger File:', file);
 		} else if (!file) {
 			throw new Error('Swagger file was not specified (swaggerFile)');
 		}
+
+		defaultLog.success('Using Swagger File:', file);
 
 		if (file && typeof swaggerSchema[file] === 'undefined' || !swaggerSchema[file]) {
 			swaggerSchema[file] = await Parser.dereference(file);
