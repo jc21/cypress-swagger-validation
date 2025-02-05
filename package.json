@@ -1,6 +1,6 @@
 {
   "name": "@jc21/cypress-swagger-validation",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Validate your Swagger file and request responses against Swagger Endpoints",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -35,6 +35,7 @@
     "@apidevtools/json-schema-ref-parser": "^11.7.2",
     "@apidevtools/swagger-parser": "^10.1.0",
     "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
     "axios": "^1.7.7",
     "json-schema": "^0.4.0",
     "jsonpath": "^1.1.1",

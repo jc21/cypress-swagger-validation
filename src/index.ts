@@ -1,12 +1,14 @@
 import $RefParser from "@apidevtools/json-schema-ref-parser";
 import * as SwaggerParser from '@apidevtools/swagger-parser';
 import Ajv, { ErrorObject } from "ajv";
+import addFormats from "ajv-formats";
 import axios from 'axios';
 import * as JsonPath from 'jsonpath';
 import Logger from './logger';
 import * as Models from './models';
 
 const defaultLog = new Logger('cypress-swagger-validation');
+
 
 export function SwaggerValidation(config: object) {
 	const swaggerSchema: any = [];
@@ -91,7 +93,8 @@ export function SwaggerValidation(config: object) {
 				allErrors: true,
 				verbose: true,
 				strictSchema: false,
-			})
+			});
+			addFormats(ajv);
 
 			if (verbose) {
 				log.debug('Endpoint:', options.method.toUpperCase(), options.endpoint);
